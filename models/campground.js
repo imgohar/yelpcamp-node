@@ -2,7 +2,8 @@ const mongoose = require("mongoose");
 
 const CampgroundSchema = mongoose.Schema({
     title: String,
-    price: String,
+    image: String,
+    price: Number,
     description: String,
     location: String
 });
