@@ -7,11 +7,18 @@ const flash = require("connect-flash");
 const morgan = require("morgan");
 const ExpressError = require("./utlis/ExpressError");
 const session = require("express-session");
+const passport = require("passport");
+const localStrategy = require("passport-local");
+const User = require("./models/user");
+const dotenv = require("dotenv");
+dotenv.config();
+const port = process.env.PORT || 3000;
 
-const campgrounds = require("./routes/campground");
-const reviews = require("./routes/review");
+const campgroundRoutes = require("./routes/campgrounds");
+const reviewRoutes = require("./routes/reviews");
+const userRoutes = require("./routes/users");
 
-mongoose.connect("mongodb://localhost:27017/yelp-camp", {
+mongoose.connect(process.env.DATABASE_CONNECTION, {
     useNewUrlParser: true,
     useCreateIndex: true,
     useUnifiedTopology: true,
@@ -46,14 +53,22 @@ const sessionConfig = {
 };
 app.use(session(sessionConfig));
 app.use(flash());
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new localStrategy(User.authenticate()));
+
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 app.use((req, res, next) => {
     res.locals.success = req.flash("success");
     res.locals.error = req.flash("error");
     next();
 });
-app.use("/campgrounds", campgrounds);
-app.use("/campgrounds/:id/reviews", reviews);
+
+app.use("/", userRoutes);
+app.use("/campgrounds", campgroundRoutes);
+app.use("/campgrounds/:id/reviews", reviewRoutes);
 
 app.get("/", (req, res) => {
     res.render("home");
@@ -71,6 +86,6 @@ app.use((err, req, res, next) => {
     res.status(status).render("error", { err });
 });
 
-app.listen(3001, () => {
-    console.log("Serving on port 3001");
+app.listen(port, () => {
+    console.log(`Serving on port ${port}`);
 });
