@@ -4,20 +4,21 @@ const catchAsync = require("../utlis/catchAsync");
 const passport = require("passport");
 const UserController = require("../controllers/UserController");
 
-router.get("/register", UserController.registerForm);
+router
+    .route("/register")
+    .get(UserController.registerForm)
+    .post(catchAsync(UserController.register));
 
-router.post("/register", catchAsync(UserController.register));
-
-router.get("/login", UserController.loginForm);
-
-router.post(
-    "/login",
-    passport.authenticate("local", {
-        failureFlash: true,
-        failureRedirect: "/login",
-    }),
-    UserController.login
-);
+router
+    .route("/login")
+    .get(UserController.loginForm)
+    .post(
+        passport.authenticate("local", {
+            failureFlash: true,
+            failureRedirect: "/login",
+        }),
+        UserController.login
+    );
 
 router.get("/logout", UserController.logout);
 

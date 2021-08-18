@@ -6,18 +6,16 @@ const { isLoggedIn } = require("../middlewares/isLoggedIn");
 const { isAuthor } = require("../middlewares/isAuthor");
 const { validateCampground } = require("../middlewares/validate");
 
-router.get("/", catchAsync(CampgroundController.index));
+router
+    .route("/")
+    .get(catchAsync(CampgroundController.index))
+    .post(
+        isLoggedIn,
+        validateCampground,
+        catchAsync(CampgroundController.create)
+    );
 
 router.get("/create", isLoggedIn, CampgroundController.createForm);
-
-router.post(
-    "/",
-    isLoggedIn,
-    validateCampground,
-    catchAsync(CampgroundController.create)
-);
-
-router.get("/:id", catchAsync(CampgroundController.show));
 
 router.get(
     "/:id/edit",
@@ -26,19 +24,15 @@ router.get(
     catchAsync(CampgroundController.edit)
 );
 
-router.put(
-    "/:id",
-    isLoggedIn,
-    isAuthor,
-    validateCampground,
-    catchAsync(CampgroundController.update)
-);
-
-router.delete(
-    "/:id",
-    isLoggedIn,
-    isAuthor,
-    catchAsync(CampgroundController.delete)
-);
+router
+    .route("/:id")
+    .get(catchAsync(CampgroundController.show))
+    .put(
+        isLoggedIn,
+        isAuthor,
+        validateCampground,
+        catchAsync(CampgroundController.update)
+    )
+    .delete(isLoggedIn, isAuthor, catchAsync(CampgroundController.delete));
 
 module.exports = router;
