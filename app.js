@@ -39,7 +39,7 @@ app.set("views", path.join(__dirname, "views"));
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 app.use(express.static(path.join(__dirname, "public")));
-app.use(morgan("dev"));
+app.use(morgan(":method :url :status - :response-time ms"));
 
 const sessionConfig = {
     secret: "thisshouldbeabettersecret",
