@@ -8,6 +8,13 @@ const { validateCampground } = require("../middlewares/validate");
 const multer = require("multer");
 const upload = multer({ dest: "uploads/" });
 
+APP_NAME = "YELP CAMP";
+PORT = 3001;
+DEVELOPER_NAME = "GOHAR ASHRAF";
+DATABASE_CONNECTION = "mongodb://localhost:27017/yelp-camp";
+
+HI = HELLo;
+
 router
     .route("/")
     .get(catchAsync(CampgroundController.index))
