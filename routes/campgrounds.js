@@ -5,6 +5,8 @@ const CampgroundController = require("../controllers/CampgroudController");
 const { isLoggedIn } = require("../middlewares/isLoggedIn");
 const { isAuthor } = require("../middlewares/isAuthor");
 const { validateCampground } = require("../middlewares/validate");
+const multer = require("multer");
+const upload = multer({ dest: "uploads/" });
 
 router
     .route("/")
