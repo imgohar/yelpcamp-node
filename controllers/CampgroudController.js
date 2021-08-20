@@ -20,18 +20,17 @@ module.exports.create = async (req, res, next) => {
             limit: 1,
         })
         .send();
-    console.log(geoData.body.features);
-    console.log(geoData.body.features[0].geometry.coordinates);
-    res.send("HO");
-    // const campground = new Campground(req.body.campground);
-    // campground.image = req.files.map((f) => ({
-    //     url: f.path,
-    //     filename: f.filename,
-    // }));
-    // campground.author = req.user._id;
-    // await campground.save();
-    // req.flash("success", "Successfully created a new campground");
-    // res.redirect(`/campgrounds/${campground._id}`);
+
+    const campground = new Campground(req.body.campground);
+    campground.geometry = geoData.body.features[0].geometry;
+    campground.image = req.files.map((f) => ({
+        url: f.path,
+        filename: f.filename,
+    }));
+    campground.author = req.user._id;
+    await campground.save();
+    req.flash("success", "Successfully created a new campground");
+    res.redirect(`/campgrounds/${campground._id}`);
 };
 
 module.exports.show = async (req, res) => {
@@ -89,6 +88,5 @@ module.exports.delete = async (req, res) => {
     let id = req.params.id;
     await Campground.findByIdAndDelete(id);
     req.flash("success", "Successfully deleted a campground");
-
     res.redirect("/campgrounds");
 };
