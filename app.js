@@ -11,6 +11,7 @@ const passport = require("passport");
 const localStrategy = require("passport-local");
 const User = require("./models/user");
 const dotenv = require("dotenv");
+const mongoSanitize = require("express-mongo-sanitize");
 dotenv.config();
 const port = process.env.PORT || 3000;
 
@@ -40,6 +41,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(morgan(":method :url :status - :response-time ms"));
+app.use(mongoSanitize());
 
 const sessionConfig = {
     secret: "thisshouldbeabettersecret",
