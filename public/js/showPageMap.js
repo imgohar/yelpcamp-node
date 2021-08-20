@@ -5,6 +5,7 @@ const map = new mapboxgl.Map({
     center: loc,
     zoom: 10,
 });
+map.addControl(new mapboxgl.NavigationControl());
 
 new mapboxgl.Marker()
     .setLngLat(loc)
