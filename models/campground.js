@@ -14,6 +14,11 @@ const CampgroundSchema = mongoose.Schema({
     title: String,
     image: [ImageSchema],
     price: Number,
+    geometry: {
+        type: String,
+        enum: ["Point"],
+        required: true,
+    },
     description: String,
     location: String,
     author: {
